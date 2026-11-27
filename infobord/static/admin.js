@@ -162,6 +162,28 @@ function renderPlanning() {
   if (!CFG.jaarplanning.length) tb.innerHTML = '<tr><td colspan="5" class="hint" style="padding:1rem">Nog geen activiteiten. Importeer de PDF of voeg ze handmatig toe.</td></tr>';
 }
 
+/* ---------- sfeer: speciale momenten ---------- */
+function renderMoments() {
+  CFG.effects.moments ??= [];
+  const tb = $('#mo-table tbody');
+  tb.innerHTML = '';
+  CFG.effects.moments.forEach((m, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><select data-k="type"><option value="birthday">🎉 Verjaardag / feest (confetti)</option><option value="christmas">🎄 Kerst (lampjes)</option></select></td>
+      <td><input type="date" data-k="date"></td><td><input type="date" data-k="until"></td>
+      <td style="text-align:center"><input type="checkbox" data-k="yearly"></td>
+      <td><input data-k="text" placeholder="bijv. Hoera! Bart is jarig 🎂"></td><td><button class="btn small danger">✕</button></td>`;
+    $$('[data-k]', tr).forEach((inp) => {
+      const k = inp.dataset.k;
+      if (inp.type === 'checkbox') inp.checked = !!m[k]; else inp.value = m[k] || (k === 'type' ? 'birthday' : '');
+      inp.oninput = inp.onchange = () => { m[k] = inp.type === 'checkbox' ? inp.checked : inp.value; markDirty(); };
+    });
+    $('button', tr).onclick = () => { CFG.effects.moments.splice(i, 1); markDirty(); renderMoments(); };
+    tb.append(tr);
+  });
+  if (!CFG.effects.moments.length) tb.innerHTML = '<tr><td colspan="6" class="hint" style="padding:1rem">Nog geen momenten.</td></tr>';
+}
+
 /* ---------- gebouwen ---------- */
 function renderBuildings() {
   const box = $('#bld-list');
@@ -204,7 +226,7 @@ async function renderStatus() {
 /* ---------- init ---------- */
 async function load() {
   CFG = await api('/api/admin/config');
-  bindPaths(); renderSlides(); renderPlanning(); renderBuildings();
+  bindPaths(); renderSlides(); renderPlanning(); renderBuildings(); renderMoments();
   dirty = false; $('#save').textContent = 'Opslaan';
 }
 
@@ -240,6 +262,10 @@ $('#jp-import').onclick = async () => {
     markDirty(); renderPlanning(); toast('Geïmporteerd — controleer de datums en klik Opslaan');
   } catch (e) { toast(e.message, true); }
   btn.disabled = false; btn.textContent = 'Importeer uit PDF';
+};
+$('#mo-add').onclick = () => {
+  CFG.effects.moments.push({ type: 'birthday', date: new Date().toISOString().slice(0, 10), until: '', yearly: true, text: '' });
+  markDirty(); renderMoments();
 };
 $('#bld-add').onclick = () => { CFG.sources.verhuur.push({ name: '', url: '' }); markDirty(); renderBuildings(); };
 $('#refresh').onclick = async () => { await api('/api/admin/refresh', { method: 'POST' }); toast('Verversen gestart'); setTimeout(() => renderStatus(), 6000); };

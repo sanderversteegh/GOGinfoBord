@@ -107,6 +107,63 @@ def _fb_feed_slide(s, cache, today, page_id=""):
     }
 
 
+SEASONS = {12: "winter", 1: "winter", 2: "winter", 3: "spring", 4: "spring", 5: "spring",
+           9: "autumn", 10: "autumn", 11: "autumn"}
+
+
+def _md_date(year, iso):
+    """Datum met maand/dag uit iso in het gegeven jaar (29 feb -> 28 feb)."""
+    d = dt.date.fromisoformat(iso)
+    try:
+        return d.replace(year=year)
+    except ValueError:
+        return d.replace(year=year, day=28)
+
+
+def moment_active(m, today):
+    if not m.get("date"):
+        return False
+    try:
+        start = dt.date.fromisoformat(m["date"])
+        end = dt.date.fromisoformat(m["until"]) if m.get("until") else start
+    except ValueError:
+        return False
+    if not m.get("yearly"):
+        return start <= today <= max(start, end)
+    for y in (today.year, today.year - 1):  # ook periodes over de jaarwisseling
+        s = _md_date(y, m["date"])
+        e = _md_date(y, m["until"] if m.get("until") else m["date"])
+        if e < s:
+            e = _md_date(y + 1, m["until"])
+        if s <= today <= e:
+            return True
+    return False
+
+
+def effects(cfg, today):
+    ef = cfg.get("effects", {})
+    season = ef.get("season", "auto")
+    if season == "auto":
+        season = SEASONS.get(today.month, "")
+    if season not in ("autumn", "winter", "spring"):
+        season = ""
+    confetti = lights = False
+    messages = []
+    if ef.get("christmas_auto", True) and ((today.month == 12 and today.day >= 7) or (today.month == 1 and today.day <= 6)):
+        lights = True
+    for m in ef.get("moments", []):
+        if not moment_active(m, today):
+            continue
+        if m.get("type") == "christmas":
+            lights = True
+        else:
+            confetti = True
+        if m.get("text"):
+            messages.append({"type": m.get("type", "birthday"), "text": m["text"]})
+    return {"season": season, "amount": ef.get("amount", "normal"), "confetti": confetti,
+            "lights": lights, "messages": messages}
+
+
 def build_state(cfg, cache, boot, version):
     g, side, src = cfg["general"], cfg["sidebar"], cfg["sources"]
     today = dt.datetime.now(ZoneInfo(g["timezone"])).date()
@@ -185,4 +242,5 @@ def build_state(cfg, cache, boot, version):
         "verhuur": {"today": today_status, "agenda": agenda[: int(side.get("agenda_max", 7))],
                     "meta": meta("verhuur")},
         "slides": slides,
+        "effects": effects(cfg, today),
     }

@@ -395,6 +395,7 @@ async function poll() {
     S.boot = st.boot; S.day = S.day || st.today;
     applyGeneral(st.general);
     renderWeather(st); renderStook(st); renderAgenda(st);
+    try { window.Effects && Effects.set(st.effects); } catch (e) { console.error('effecten', e); }
     buildSlides(st);
   } catch (e) {
     console.warn('poll mislukt', e);

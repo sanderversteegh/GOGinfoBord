@@ -86,6 +86,12 @@ DEFAULT_CONFIG = {
          "text": "Scan de code voor onze website, de jaarplanning en het verhuren van onze gebouwen.",
          "url": "https://www.graafottogroep.nl/", "from": "", "until": ""},
     ],
+    "effects": {
+        "season": "auto",
+        "amount": "normal",
+        "christmas_auto": True,
+        "moments": [],
+    },
     "update": {
         "repo": "sanderversteegh/GOGinfoBord",
         "branch": "main",
