@@ -148,6 +148,7 @@ def effects(cfg, today):
     if season not in ("autumn", "winter", "spring"):
         season = ""
     confetti = lights = False
+    hide_season = False
     messages = []
     if ef.get("christmas_auto", True) and ((today.month == 12 and today.day >= 7) or (today.month == 1 and today.day <= 6)):
         lights = True
@@ -158,8 +159,12 @@ def effects(cfg, today):
             lights = True
         else:
             confetti = True
+        if m.get("with_season") is False:  # moment zonder seizoensanimatie
+            hide_season = True
         if m.get("text"):
             messages.append({"type": m.get("type", "birthday"), "text": m["text"]})
+    if hide_season:
+        season = ""
     return {"season": season, "amount": ef.get("amount", "normal"), "confetti": confetti,
             "lights": lights, "messages": messages}
 

@@ -172,16 +172,18 @@ function renderMoments() {
     tr.innerHTML = `<td><select data-k="type"><option value="birthday">🎉 Verjaardag / feest (confetti)</option><option value="christmas">🎄 Kerst (lampjes)</option></select></td>
       <td><input type="date" data-k="date"></td><td><input type="date" data-k="until"></td>
       <td style="text-align:center"><input type="checkbox" data-k="yearly"></td>
+      <td style="text-align:center"><input type="checkbox" data-k="with_season" title="Seizoensanimatie ook tonen tijdens dit moment"></td>
       <td><input data-k="text" placeholder="bijv. Hoera! Bart is jarig 🎂"></td><td><button class="btn small danger">✕</button></td>`;
     $$('[data-k]', tr).forEach((inp) => {
       const k = inp.dataset.k;
-      if (inp.type === 'checkbox') inp.checked = !!m[k]; else inp.value = m[k] || (k === 'type' ? 'birthday' : '');
+      if (inp.type === 'checkbox') inp.checked = k === 'with_season' ? m[k] !== false : !!m[k];
+      else inp.value = m[k] || (k === 'type' ? 'birthday' : '');
       inp.oninput = inp.onchange = () => { m[k] = inp.type === 'checkbox' ? inp.checked : inp.value; markDirty(); };
     });
     $('button', tr).onclick = () => { CFG.effects.moments.splice(i, 1); markDirty(); renderMoments(); };
     tb.append(tr);
   });
-  if (!CFG.effects.moments.length) tb.innerHTML = '<tr><td colspan="6" class="hint" style="padding:1rem">Nog geen momenten.</td></tr>';
+  if (!CFG.effects.moments.length) tb.innerHTML = '<tr><td colspan="7" class="hint" style="padding:1rem">Nog geen momenten.</td></tr>';
 }
 
 /* ---------- gebouwen ---------- */
@@ -264,7 +266,7 @@ $('#jp-import').onclick = async () => {
   btn.disabled = false; btn.textContent = 'Importeer uit PDF';
 };
 $('#mo-add').onclick = () => {
-  CFG.effects.moments.push({ type: 'birthday', date: new Date().toISOString().slice(0, 10), until: '', yearly: true, text: '' });
+  CFG.effects.moments.push({ type: 'birthday', date: new Date().toISOString().slice(0, 10), until: '', yearly: true, with_season: true, text: '' });
   markDirty(); renderMoments();
 };
 $('#bld-add').onclick = () => { CFG.sources.verhuur.push({ name: '', url: '' }); markDirty(); renderBuildings(); };
