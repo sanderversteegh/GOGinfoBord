@@ -22,6 +22,8 @@ DEFAULT_CONFIG = {
         "title": "Scouting Graaf Otto Groep",
         "subtitle": "Lochem",
         "logo": "",
+        "logo_size": "normal",
+        "show_title": True,
         "timezone": "Europe/Amsterdam",
         "lat": 52.1595,
         "lon": 6.4140,

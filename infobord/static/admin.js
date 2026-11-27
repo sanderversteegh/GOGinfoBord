@@ -84,12 +84,18 @@ const DEFAULTS = { fbposts: { layout: 'list', title: 'Nieuws van Facebook', coun
   weather: { title: 'Weersverwachting' }, web: { zoom: 100 }, image: { fit: 'contain' } };
 
 function field(obj, [key, label, kind]) {
+  if (kind === 'image') {
+    const box = document.createElement('div');
+    box.className = 'field wide';
+    box.innerHTML = `<span class="field-label">${esc(label)}</span>`;
+    box.append(imageField(obj[key], (v) => (obj[key] = v)));
+    return box;
+  }
   const lab = document.createElement('label');
-  if (kind === 'textarea' || kind === 'image') lab.className = 'wide';
+  if (kind === 'textarea') lab.className = 'wide';
   lab.textContent = label;
   let inp;
   if (kind === 'textarea') inp = document.createElement('textarea');
-  else if (kind === 'image') { lab.append(imageField(obj[key], (v) => (obj[key] = v))); return lab; }
   else if (kind.startsWith('select:')) {
     inp = document.createElement('select');
     kind.slice(7).split('|').forEach((o) => { const [v, t] = o.split('='); inp.add(new Option(t, v)); });

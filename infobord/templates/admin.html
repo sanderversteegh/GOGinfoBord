@@ -58,10 +58,20 @@
   <!-- ALGEMEEN -->
   <section data-pane="general" class="pane">
     <h2>Algemeen</h2>
+    <h3>Kop bovenin het scherm</h3>
     <div class="form">
+      <div class="field wide"><span class="field-label">Logo (PNG met doorzichtige achtergrond werkt het mooist)</span><div data-img-path="general.logo"></div></div>
+      <label>Grootte logo
+        <select data-path="general.logo_size">
+          <option value="small">Klein</option><option value="normal">Normaal</option>
+          <option value="large">Groot</option><option value="xl">Extra groot</option>
+        </select></label>
+      <label class="check"><input type="checkbox" data-path="general.show_title"> Titel en ondertitel naast het logo tonen</label>
       <label>Titel<input data-path="general.title"></label>
       <label>Ondertitel / plaats<input data-path="general.subtitle"></label>
-      <label>Logo<div class="img-field" data-img-path="general.logo"></div></label>
+    </div>
+    <h3>Kleuren, weer en mededelingen</h3>
+    <div class="form">
       <label>Hoofdkleur<input data-path="general.primary" type="color"></label>
       <label>Accentkleur<input data-path="general.accent" type="color"></label>
       <label class="wide">Mededelingsbalk (leeg = verborgen)<input data-path="general.ticker" placeholder="Bijv. Opkomst zaterdag gaat niet door i.v.m. storm"></label>

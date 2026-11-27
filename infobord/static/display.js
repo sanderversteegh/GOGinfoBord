@@ -178,7 +178,7 @@ const RENDER = {
   },
   image(s) {
     if (!s.image) return null;
-    return wrap(s, `<div class="img-full"><img src="${esc(s.image)}" alt="" style="object-fit:${s.fit === 'cover' ? 'cover' : 'contain'}"></div>
+    return wrap(s, `<div class="img-full fit-${s.fit === 'cover' ? 'cover' : 'contain'}"><img src="${esc(s.image)}" alt=""></div>
       ${s.caption ? `<div class="img-cap">${esc(s.caption)}</div>` : ''}`);
   },
   jaarplanning(s, st) {
@@ -378,6 +378,9 @@ function applyGeneral(g) {
   $('#brand-sub').textContent = g.subtitle || '';
   const logo = $('#logo');
   if (g.logo) { if (logo.getAttribute('src') !== g.logo) logo.src = g.logo; logo.hidden = false; } else logo.hidden = true;
+  const sizes = { small: '2.6rem', normal: '3.6rem', large: '5rem', xl: '7rem' };
+  document.documentElement.style.setProperty('--logo-h', sizes[g.logo_size] || sizes.normal);
+  $('#brand-text').hidden = g.show_title === false;
   $('#ticker').hidden = !g.ticker;
   $('#ticker-text').textContent = g.ticker || '';
 }

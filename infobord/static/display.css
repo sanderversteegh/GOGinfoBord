@@ -30,7 +30,7 @@ body {
 /* ---------- linker gedeelte ---------- */
 #stage { display: flex; flex-direction: column; padding: 1.8rem 2.2rem 1.4rem; min-width: 0; }
 #brand { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.4rem; }
-#logo { height: 3.4rem; width: auto; }
+#logo { height: var(--logo-h, 3.4rem); width: auto; max-width: 40%; object-fit: contain; }
 #brand-title { font-size: 1.55rem; font-weight: 800; color: var(--primary); letter-spacing: -.01em; }
 #brand-sub { font-size: .95rem; color: var(--muted); }
 #dots { margin-left: auto; display: flex; gap: .45rem; }
@@ -86,8 +86,13 @@ body {
 .theme-accent .t-body li::before { background: #fff; }
 
 /* afbeelding */
-.img-full { flex: 1; min-height: 0; border-radius: 1.2rem; overflow: hidden; background: #000; }
-.img-full img { width: 100%; height: 100%; display: block; }
+.img-full { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+/* hele afbeelding: geen balken, de achtergrond blijft zichtbaar */
+.img-full.fit-contain img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto;
+  border-radius: 1rem; filter: drop-shadow(0 .6rem 1.4rem rgba(31,61,43,.16)); }
+/* scherm vullen: bijsnijden */
+.img-full.fit-cover { border-radius: 1.2rem; overflow: hidden; }
+.img-full.fit-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .img-cap { font-size: 1.4rem; margin-top: .9rem; font-weight: 600; }
 
 /* jaarplanning */
