@@ -123,6 +123,13 @@
     <div class="form">
       <label>Hoofdkleur<input data-path="general.primary" type="color"></label>
       <label>Accentkleur<input data-path="general.accent" type="color"></label>
+      <label>Vakken in de zijbalk (weer, risico, agenda)
+        <select data-path="general.sidebar_cards">
+          <option value="light">Lichter dan de achtergrond</option>
+          <option value="slight">Iets donkerder</option>
+          <option value="dark">Donkerder</option>
+          <option value="darker">Veel donkerder</option>
+        </select></label>
       <label class="wide">Mededelingsbalk (leeg = verborgen)<input data-path="general.ticker" placeholder="Bijv. Opkomst zaterdag gaat niet door i.v.m. storm"></label>
       <label>Breedtegraad (weer)<input data-path="general.lat" type="number" step="0.0001"></label>
       <label>Lengtegraad (weer)<input data-path="general.lon" type="number" step="0.0001"></label>

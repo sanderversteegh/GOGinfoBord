@@ -236,7 +236,7 @@ body {
 #date::first-letter { text-transform: uppercase; }
 #date .wk { color: var(--side-muted); margin-left: .5rem; font-size: .95rem; }
 
-.card { background: rgba(255,255,255,.075); border-radius: 1.1rem; padding: .85rem 1.1rem; }
+.card { background: var(--card-bg, rgba(255,255,255,.075)); border-radius: 1.1rem; padding: .85rem 1.1rem; }
 .card h3 { font-size: .78rem; text-transform: uppercase; letter-spacing: .14em; color: var(--side-muted);
   font-weight: 800; margin-bottom: .6rem; display: flex; justify-content: space-between; }
 .card h3 small { letter-spacing: .02em; text-transform: none; font-weight: 600; }

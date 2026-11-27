@@ -29,6 +29,7 @@ DEFAULT_CONFIG = {
         "lon": 6.4140,
         "primary": "#1f3d2b",
         "accent": "#e07a2e",
+        "sidebar_cards": "dark",
         "ticker": "",
         "admin_password_hash": "",
     },

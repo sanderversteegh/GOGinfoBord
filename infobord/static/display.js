@@ -378,6 +378,8 @@ function applyGeneral(g) {
   $('#brand-sub').textContent = g.subtitle || '';
   const logo = $('#logo');
   if (g.logo) { if (logo.getAttribute('src') !== g.logo) logo.src = g.logo; logo.hidden = false; } else logo.hidden = true;
+  const cards = { light: 'rgba(255,255,255,.075)', slight: 'rgba(0,0,0,.12)', dark: 'rgba(0,0,0,.22)', darker: 'rgba(0,0,0,.34)' };
+  document.documentElement.style.setProperty('--card-bg', cards[g.sidebar_cards] || cards.dark);
   const sizes = { small: '2.6rem', normal: '3.6rem', large: '5rem', xl: '7rem' };
   document.documentElement.style.setProperty('--logo-h', sizes[g.logo_size] || sizes.normal);
   $('#brand-text').hidden = g.show_title === false;
