@@ -123,11 +123,10 @@
     if (lightsOn) buildLights();
   }
 
-  function setSystems(wanted, amount) {
-    const k = AMOUNT[amount] || 1;
+  function setSystems(wanted, amounts) {
     for (const name of Object.keys(systems)) if (!wanted.includes(name)) delete systems[name];
     for (const name of wanted) {
-      const n = Math.round(BASE[name] * k);
+      const n = Math.round(BASE[name] * (AMOUNT[(amounts || {})[name]] || 1));
       const list = systems[name] || [];
       while (list.length < n) list.push(make(name, true));
       list.length = n;
@@ -182,6 +181,7 @@
 
   /* ---------- publieke functie ---------- */
   window.Effects = {
+    counts: () => Object.fromEntries(Object.entries(systems).map(([k, v]) => [k, v.length])),
     set(fx) {
       fx = fx || {};
       // Voorbeeld via de adresbalk: /?preview=winter,confetti,lights
@@ -189,7 +189,7 @@
       if (pv) {
         const parts = pv.split(/[,+ ]/);
         fx = { season: ['autumn', 'winter', 'spring'].find((x) => parts.includes(x)) || '',
-          confetti: parts.includes('confetti'), lights: parts.includes('lights'), amount: fx.amount,
+          confetti: parts.includes('confetti'), lights: parts.includes('lights'), amounts: fx.amounts,
           messages: parts.includes('confetti') ? [{ type: 'birthday', text: 'Hoera! Voorbeeld van een verjaardag 🎂' }] : [] };
       }
       const key = JSON.stringify(fx);
@@ -206,7 +206,7 @@
       const wanted = [];
       if (fx.season) wanted.push(fx.season);
       if (fx.confetti) wanted.push('confetti');
-      setSystems(wanted.filter((w) => BASE[w]), fx.amount);
+      setSystems(wanted.filter((w) => BASE[w]), fx.amounts);
       setLights(!!fx.lights);
       setMessages(fx.messages);
     },

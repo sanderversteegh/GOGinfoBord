@@ -165,7 +165,8 @@ def effects(cfg, today):
             messages.append({"type": m.get("type", "birthday"), "text": m["text"]})
     if hide_season:
         season = ""
-    return {"season": season, "amount": ef.get("amount", "normal"), "confetti": confetti,
+    amounts = {k: ef.get(f"amount_{k}") or "normal" for k in ("autumn", "winter", "spring", "confetti")}
+    return {"season": season, "amounts": amounts, "confetti": confetti,
             "lights": lights, "messages": messages}
 
 

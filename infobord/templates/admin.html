@@ -69,13 +69,20 @@
           <option value="spring">Lente – vallende bloesem</option>
           <option value="off">Uit</option>
         </select></label>
-      <label>Hoeveelheid
-        <select data-path="effects.amount">
-          <option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option>
-        </select></label>
       <label class="check"><input type="checkbox" data-path="effects.christmas_auto"> Kerstlampjes automatisch van 7 december t/m 6 januari</label>
     </div>
     <p class="hint">Automatisch: lente maart–mei, geen animatie in de zomer (juni–augustus), herfst september–november, winter december–februari.</p>
+    <h3>Hoeveelheid per animatie</h3>
+    <div class="form">
+      <label>🍂 Herfst – blaadjes
+        <select data-path="effects.amount_autumn"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
+      <label>❄️ Winter – sneeuw
+        <select data-path="effects.amount_winter"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
+      <label>🌸 Lente – bloesem
+        <select data-path="effects.amount_spring"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
+      <label>🎉 Confetti
+        <select data-path="effects.amount_confetti"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
+    </div>
 
     <div class="pane-head" style="margin-top:1.6rem">
       <div><h3 style="margin:0">Speciale momenten</h3>

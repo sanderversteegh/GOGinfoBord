@@ -88,7 +88,10 @@ DEFAULT_CONFIG = {
     ],
     "effects": {
         "season": "auto",
-        "amount": "normal",
+        "amount_autumn": "few",
+        "amount_winter": "many",
+        "amount_spring": "normal",
+        "amount_confetti": "normal",
         "christmas_auto": True,
         "moments": [],
     },
