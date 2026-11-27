@@ -29,7 +29,7 @@ body {
 
 /* ---------- linker gedeelte ---------- */
 #stage { position: relative; display: flex; flex-direction: column; padding: 1.8rem 2.2rem 1.4rem; min-width: 0; }
-#stage > *:not(#fx) { position: relative; z-index: 1; }
+#stage > *:not(#fx):not(#sunrays) { position: relative; z-index: 1; }
 #fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 #brand { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.4rem; }
 #logo { height: var(--logo-h, 3.4rem); width: auto; max-width: 40%; object-fit: contain; }
@@ -296,7 +296,7 @@ body {
 
 /* ---------- sfeer: feestbanner en kerstlampjes ---------- */
 /* tijdens een animatie zijn de vlakken licht doorschijnend, zodat blaadjes/sneeuw er zacht achter langs vallen */
-body.has-fx { --paper: rgba(255, 253, 248, .8); }
+body.has-fx { --paper: rgba(255, 253, 248, .74); }
 #celebrate { margin-top: 1rem; display: flex; align-items: center; gap: .8rem; background: var(--primary); color: #fff;
   border-radius: .8rem; padding: .7rem 1.1rem; font-size: 1.3rem; font-weight: 800; }
 #celebrate .emoji { font-size: 1.6rem; }
@@ -314,3 +314,16 @@ body.has-lights #sidebar { padding-top: 3.2rem; }
   0%, 40% { opacity: 1; filter: brightness(1.15); }
   100% { opacity: .3; filter: brightness(.6); box-shadow: 0 0 .1rem 0 var(--c); }
 }
+
+/* zonnestralen: langzaam draaiende stralen vanuit de hoek rechtsboven */
+#sunrays { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+#sunrays .rays { position: absolute; left: 100%; top: 0; width: 220vmax; height: 220vmax; margin: -110vmax 0 0 -110vmax;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 196, 70, .16) 0deg 5deg, transparent 5deg 15deg);
+  -webkit-mask-image: radial-gradient(circle, #000 0, rgba(0,0,0,.55) 18%, transparent 42%);
+  mask-image: radial-gradient(circle, #000 0, rgba(0,0,0,.55) 18%, transparent 42%);
+  animation: sunspin 150s linear infinite; }
+#sunrays .glow { position: absolute; right: -18vmax; top: -18vmax; width: 52vmax; height: 52vmax; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 214, 110, .55) 0, rgba(255, 196, 70, .18) 40%, transparent 70%);
+  animation: sunpulse 9s ease-in-out infinite alternate; }
+@keyframes sunspin { to { transform: rotate(360deg); } }
+@keyframes sunpulse { from { opacity: .75; } to { opacity: 1; } }

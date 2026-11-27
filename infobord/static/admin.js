@@ -169,7 +169,9 @@ function renderMoments() {
   tb.innerHTML = '';
   CFG.effects.moments.forEach((m, i) => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td><select data-k="type"><option value="birthday">🎉 Verjaardag / feest (confetti)</option><option value="christmas">🎄 Kerst (lampjes)</option></select></td>
+    tr.innerHTML = `<td><select data-k="type"><option value="birthday">🎉 Verjaardag / feest (confetti)</option><option value="christmas">🎄 Kerst (lampjes)</option>
+        <option value="fireflies">✨ Vuurvliegjes</option><option value="fluff">🌼 Paardenbloempluisjes</option>
+        <option value="sparks">🔥 Kampvuurvonkjes</option><option value="sunrays">☀️ Zonnestralen</option></select></td>
       <td><input type="date" data-k="date"></td><td><input type="date" data-k="until"></td>
       <td style="text-align:center"><input type="checkbox" data-k="yearly"></td>
       <td style="text-align:center"><input type="checkbox" data-k="with_season" title="Seizoensanimatie ook tonen tijdens dit moment"></td>

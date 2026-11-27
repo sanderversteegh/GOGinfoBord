@@ -67,11 +67,12 @@
           <option value="autumn">Herfst – vallende blaadjes</option>
           <option value="winter">Winter – vallende sneeuw</option>
           <option value="spring">Lente – vallende bloesem</option>
+          <option value="summer">Zomer – fladderende vlinders</option>
           <option value="off">Uit</option>
         </select></label>
       <label class="check"><input type="checkbox" data-path="effects.christmas_auto"> Kerstlampjes automatisch van 7 december t/m 6 januari</label>
     </div>
-    <p class="hint">Automatisch: lente maart–mei, geen animatie in de zomer (juni–augustus), herfst september–november, winter december–februari.</p>
+    <p class="hint">Automatisch: lente maart–mei, zomer juni–augustus, herfst september–november, winter december–februari.</p>
     <h3>Hoeveelheid per animatie</h3>
     <div class="form">
       <label>🍂 Herfst – blaadjes
@@ -80,13 +81,22 @@
         <select data-path="effects.amount_winter"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
       <label>🌸 Lente – bloesem
         <select data-path="effects.amount_spring"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
+      <label>🦋 Zomer – vlinders
+        <select data-path="effects.amount_summer"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
       <label>🎉 Confetti
         <select data-path="effects.amount_confetti"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
+      <label>✨ Vuurvliegjes
+        <select data-path="effects.amount_fireflies"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
+      <label>🌼 Paardenbloempluisjes
+        <select data-path="effects.amount_fluff"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
+      <label>🔥 Kampvuurvonkjes
+        <select data-path="effects.amount_sparks"><option value="few">Weinig</option><option value="normal">Normaal</option><option value="many">Veel</option></select></label>
+      <label class="check"><input type="checkbox" data-path="effects.sparks_follow_stook"> Geen kampvuurvonkjes bij natuurbrandrisico fase 2 of hoger</label>
     </div>
 
     <div class="pane-head" style="margin-top:1.6rem">
       <div><h3 style="margin:0">Speciale momenten</h3>
-        <p class="hint">Verjaardag/feest geeft confetti, kerst geeft lampjes bovenin. Met een tekst verschijnt er ook een feestbalk op het scherm. Zet “Met seizoen” uit als je tijdens dit moment alleen de confetti of lampjes wilt zien, zonder blaadjes, sneeuw of bloesem.</p></div>
+        <p class="hint">Kies per moment een effect: confetti, kerstlampjes, vuurvliegjes, pluisjes, kampvuurvonkjes of zonnestralen. Met een tekst verschijnt er ook een feestbalk op het scherm. Zet “Met seizoen” uit als je tijdens dit moment alleen de confetti of lampjes wilt zien, zonder blaadjes, sneeuw of bloesem.</p></div>
       <button class="btn" id="mo-add">+ Moment</button>
     </div>
     <table class="grid" id="mo-table">
@@ -96,10 +106,18 @@
 
     <h3>Voorbeeld bekijken</h3>
     <div class="row">
-      <a class="btn" target="_blank" href="/?preview=autumn">Herfst</a>
-      <a class="btn" target="_blank" href="/?preview=winter,lights">Winter + kerst</a>
-      <a class="btn" target="_blank" href="/?preview=spring">Lente</a>
-      <a class="btn" target="_blank" href="/?preview=autumn,confetti">Verjaardag</a>
+      <a class="btn" target="_blank" href="/?preview=autumn">🍂 Herfst</a>
+      <a class="btn" target="_blank" href="/?preview=winter,lights">❄️ Winter + kerst</a>
+      <a class="btn" target="_blank" href="/?preview=spring">🌸 Lente</a>
+      <a class="btn" target="_blank" href="/?preview=summer">🦋 Zomer</a>
+    </div>
+    <div class="row">
+      <a class="btn" target="_blank" href="/?preview=confetti">🎉 Confetti</a>
+      <a class="btn" target="_blank" href="/?preview=fireflies">✨ Vuurvliegjes</a>
+      <a class="btn" target="_blank" href="/?preview=fluff">🌼 Pluisjes</a>
+      <a class="btn" target="_blank" href="/?preview=sparks">🔥 Vonkjes</a>
+      <a class="btn" target="_blank" href="/?preview=sunrays">☀️ Zonnestralen</a>
+      <a class="btn" target="_blank" href="/?preview=summer,sunrays,sparks">Zomerkamp (combinatie)</a>
     </div>
     <p class="hint">Het voorbeeld opent in een nieuw tabblad en verandert niets aan het echte scherm.</p>
   </section>

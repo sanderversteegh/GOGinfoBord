@@ -108,7 +108,12 @@ def _fb_feed_slide(s, cache, today, page_id=""):
 
 
 SEASONS = {12: "winter", 1: "winter", 2: "winter", 3: "spring", 4: "spring", 5: "spring",
-           9: "autumn", 10: "autumn", 11: "autumn"}
+           6: "summer", 7: "summer", 8: "summer", 9: "autumn", 10: "autumn", 11: "autumn"}
+SEASON_KINDS = ("autumn", "winter", "spring", "summer")
+# soort speciaal moment -> effect
+MOMENT_EFFECT = {"birthday": "confetti", "fireflies": "fireflies", "fluff": "fluff",
+                 "sparks": "sparks", "sunrays": "sunrays", "christmas": "lights"}
+AMOUNT_KINDS = ("autumn", "winter", "spring", "summer", "confetti", "fireflies", "fluff", "sparks")
 
 
 def _md_date(year, iso):
@@ -140,34 +145,35 @@ def moment_active(m, today):
     return False
 
 
-def effects(cfg, today):
+def effects(cfg, today, stook_level=0):
     ef = cfg.get("effects", {})
     season = ef.get("season", "auto")
     if season == "auto":
         season = SEASONS.get(today.month, "")
-    if season not in ("autumn", "winter", "spring"):
+    if season not in SEASON_KINDS:
         season = ""
-    confetti = lights = False
-    hide_season = False
-    messages = []
+    extras, lights, hide_season, messages = [], False, False, []
     if ef.get("christmas_auto", True) and ((today.month == 12 and today.day >= 7) or (today.month == 1 and today.day <= 6)):
         lights = True
     for m in ef.get("moments", []):
         if not moment_active(m, today):
             continue
-        if m.get("type") == "christmas":
+        effect = MOMENT_EFFECT.get(m.get("type"), "confetti")
+        if effect == "lights":
             lights = True
-        else:
-            confetti = True
+        elif effect not in extras:
+            extras.append(effect)
         if m.get("with_season") is False:  # moment zonder seizoensanimatie
             hide_season = True
         if m.get("text"):
             messages.append({"type": m.get("type", "birthday"), "text": m["text"]})
     if hide_season:
         season = ""
-    amounts = {k: ef.get(f"amount_{k}") or "normal" for k in ("autumn", "winter", "spring", "confetti")}
-    return {"season": season, "amounts": amounts, "confetti": confetti,
-            "lights": lights, "messages": messages}
+    # geen kampvuurvonkjes op het scherm als er een verhoogd natuurbrandrisico is
+    if "sparks" in extras and stook_level >= 2 and ef.get("sparks_follow_stook", True):
+        extras.remove("sparks")
+    amounts = {k: ef.get(f"amount_{k}") or "normal" for k in AMOUNT_KINDS}
+    return {"season": season, "amounts": amounts, "extras": extras, "lights": lights, "messages": messages}
 
 
 def build_state(cfg, cache, boot, version):
@@ -248,5 +254,5 @@ def build_state(cfg, cache, boot, version):
         "verhuur": {"today": today_status, "agenda": agenda[: int(side.get("agenda_max", 7))],
                     "meta": meta("verhuur")},
         "slides": slides,
-        "effects": effects(cfg, today),
+        "effects": effects(cfg, today, int((stook or {}).get("level") or 0)),
     }
