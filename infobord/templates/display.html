@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Infobord</title>
+  <link rel="stylesheet" href="/static/display.css?v={{ v }}">
+</head>
+<body>
+<div id="app">
+  <main id="stage">
+    <header id="brand">
+      <img id="logo" alt="" hidden>
+      <div>
+        <div id="brand-title"></div>
+        <div id="brand-sub"></div>
+      </div>
+      <div id="dots"></div>
+    </header>
+    <div id="slides"></div>
+    <div id="ticker" hidden><span class="ticker-tag">Let op</span><span id="ticker-text"></span></div>
+    <div id="progress"><div id="progress-bar"></div></div>
+  </main>
+  <aside id="sidebar">
+    <section id="clock">
+      <div id="time">--:--</div>
+      <div id="date"></div>
+    </section>
+    <section id="weather" class="card"></section>
+    <section id="stook" class="card"></section>
+    <section id="agenda" class="card"></section>
+  </aside>
+</div>
+<div id="offline" hidden>Geen verbinding met de infobord-server — laatst bekende gegevens worden getoond</div>
+<script src="/static/display.js?v={{ v }}"></script>
+</body>
+</html>

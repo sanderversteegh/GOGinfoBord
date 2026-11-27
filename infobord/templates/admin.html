@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beheer – Infobord</title>
+  <link rel="stylesheet" href="/static/admin.css?v={{ v }}">
+</head>
+<body>
+<header class="top">
+  <h1>Infobord beheer</h1>
+  <nav id="tabs">
+    <button data-tab="slides" class="on">Slides</button>
+    <button data-tab="planning">Jaarplanning</button>
+    <button data-tab="general">Algemeen</button>
+    <button data-tab="sources">Bronnen</button>
+    <button data-tab="screen">Scherm</button>
+    <button data-tab="status">Status</button>
+  </nav>
+  <div class="top-actions">
+    <a class="btn ghost" href="/" target="_blank">Bekijk scherm ↗</a>
+    <button class="btn primary" id="save">Opslaan</button>
+  </div>
+</header>
+
+{% if not password_set %}
+<div class="banner">Er is nog geen beheerwachtwoord ingesteld — iedereen op het netwerk kan nu instellingen wijzigen. Stel er een in onder <b>Algemeen</b>.</div>
+{% endif %}
+
+<main>
+  <!-- SLIDES -->
+  <section data-pane="slides" class="pane on">
+    <div class="pane-head">
+      <div><h2>Slides</h2><p class="hint">De slides rouleren links op het scherm; met ↑ ↓ wijzig je de volgorde. Met “Van/Tot” laat je een slide alleen in een periode zien.</p></div>
+      <div class="row">
+        <select id="new-type"></select>
+        <button class="btn" id="add-slide">+ Slide toevoegen</button>
+      </div>
+    </div>
+    <div id="slide-list"></div>
+  </section>
+
+  <!-- JAARPLANNING -->
+  <section data-pane="planning" class="pane">
+    <div class="pane-head">
+      <div><h2>Jaarplanning</h2><p class="hint">Activiteiten voor de slide “Jaarplanning”. Je kunt ze importeren uit de PDF van de website — controleer daarna altijd de datums.</p></div>
+      <div class="row">
+        <button class="btn" id="jp-import">Importeer uit PDF</button>
+        <button class="btn" id="jp-add">+ Activiteit</button>
+      </div>
+    </div>
+    <label class="wide">PDF-adres jaarplanning<input data-path="sources.jaarplanning_pdf" type="url"></label>
+    <table class="grid" id="jp-table">
+      <thead><tr><th>Datum</th><th>t/m (optioneel)</th><th>Activiteit</th><th>Speltak / info</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- ALGEMEEN -->
+  <section data-pane="general" class="pane">
+    <h2>Algemeen</h2>
+    <div class="form">
+      <label>Titel<input data-path="general.title"></label>
+      <label>Ondertitel / plaats<input data-path="general.subtitle"></label>
+      <label>Logo<div class="img-field" data-img-path="general.logo"></div></label>
+      <label>Hoofdkleur<input data-path="general.primary" type="color"></label>
+      <label>Accentkleur<input data-path="general.accent" type="color"></label>
+      <label class="wide">Mededelingsbalk (leeg = verborgen)<input data-path="general.ticker" placeholder="Bijv. Opkomst zaterdag gaat niet door i.v.m. storm"></label>
+      <label>Breedtegraad (weer)<input data-path="general.lat" type="number" step="0.0001"></label>
+      <label>Lengtegraad (weer)<input data-path="general.lon" type="number" step="0.0001"></label>
+      <label>Tijdzone<input data-path="general.timezone"></label>
+    </div>
+    <h3>Zijbalk</h3>
+    <div class="form">
+      <label class="check"><input type="checkbox" data-path="sidebar.show_weather"> Weer tonen</label>
+      <label class="check"><input type="checkbox" data-path="sidebar.show_stook"> Stookadvies tonen</label>
+      <label class="check"><input type="checkbox" data-path="sidebar.show_agenda"> Verhuuragenda tonen</label>
+      <label class="check"><input type="checkbox" data-path="sidebar.show_labels"> Omschrijving van boekingen tonen (anders alleen “Geboekt”)</label>
+      <label>Agenda: aantal dagen vooruit<input type="number" min="1" max="120" data-path="sidebar.agenda_days"></label>
+      <label>Agenda: max. aantal regels<input type="number" min="1" max="20" data-path="sidebar.agenda_max"></label>
+    </div>
+    <h3>Beheerwachtwoord</h3>
+    <div class="row">
+      <input type="password" id="pw1" placeholder="Nieuw wachtwoord (min. 6 tekens)">
+      <button class="btn" id="pw-save">Wachtwoord instellen</button>
+      <a class="btn ghost" href="/logout">Uitloggen</a>
+    </div>
+  </section>
+
+  <!-- BRONNEN -->
+  <section data-pane="sources" class="pane">
+    <h2>Verhuuragenda</h2>
+    <p class="hint">Boekingspagina's (WP Booking System) van de website. Met “Test” zie je wat er gevonden wordt.</p>
+    <div id="bld-list"></div>
+    <div class="row"><button class="btn" id="bld-add">+ Gebouw</button></div>
+    <div class="form">
+      <label>Aantal maanden ophalen<input type="number" min="1" max="12" data-path="sources.verhuur_months"></label>
+      <label>Verversen elke (minuten)<input type="number" min="5" data-path="sources.verhuur_minutes"></label>
+    </div>
+
+    <h2>Stookadvies / natuurbrandrisico</h2>
+    <div class="form">
+      <label class="wide">Bron<input data-path="sources.stook_url" type="url"></label>
+      <label>Veiligheidsregio<input data-path="sources.stook_region"></label>
+      <label>Handmatig overschrijven
+        <select data-path="sources.stook_override">
+          <option value="">Automatisch (brandweer.nl)</option>
+          <option value="1">Fase 1</option>
+          <option value="2">Fase 2</option>
+          <option value="3">Fase 3 / hoog risico</option>
+        </select></label>
+      <label class="wide">Eigen opmerking (bijv. regels voor kampvuur bij het clubhuis)<input data-path="sources.stook_note"></label>
+      <label>Verversen elke (minuten)<input type="number" min="10" data-path="sources.stook_minutes"></label>
+    </div>
+    <div class="row"><button class="btn" id="stook-test">Test stookadvies</button><span id="stook-result" class="hint"></span></div>
+
+    <h2>Facebook-posts</h2>
+    <p class="hint">Voor de slide “Facebook-posts”. Er zijn twee manieren om de posts op te halen:
+      <b>via de website</b> (leest de Facebook-widget op jullie eigen site, geen koppeling nodig, maar zonder foto's)
+      of <b>via een token</b> (rechtstreeks van Facebook, mét foto's; je moet beheerder van de pagina zijn).</p>
+    <div class="form">
+      <label>Methode
+        <select data-path="sources.facebook_method">
+          <option value="auto">Automatisch (token, anders website)</option>
+          <option value="web">Alleen via de website</option>
+          <option value="api">Alleen via token</option>
+        </select></label>
+      <label class="wide">Webpagina met Facebook-widget<input data-path="sources.facebook_web_url" type="url"></label>
+      <label>Aantal posts ophalen<input type="number" min="1" max="12" data-path="sources.facebook_count"></label>
+      <label>Verversen elke (minuten)<input type="number" min="5" data-path="sources.facebook_minutes"></label>
+    </div>
+    <div class="row"><button class="btn" id="fb-test">Test Facebook</button></div>
+    <div id="fb-result"></div>
+
+    <h3>Token-methode (optioneel)</h3>
+    <details class="card" id="fb-connect">
+      <summary><b>Koppelen met Facebook</b> (eenmalig, of opnieuw als het token niet meer werkt)</summary>
+      <div class="form" style="margin-top:.8rem">
+        <label>App-ID<input id="fb-app-id" autocomplete="off"></label>
+        <label>App-geheim<input id="fb-app-secret" type="password" autocomplete="off"></label>
+        <label>Pagina-ID (optioneel, helpt als er geen pagina's gevonden worden)<input id="fb-page-hint" placeholder="259633054142289" autocomplete="off"></label>
+        <label class="wide">User access token (uit de Graph API Explorer)<input id="fb-user-token" type="password" autocomplete="off"></label>
+      </div>
+      <div class="row"><button class="btn" id="fb-connect-btn">Pagina's ophalen</button><span class="hint">Het app-geheim wordt niet opgeslagen.</span></div>
+      <div id="fb-pages"></div>
+    </details>
+    <div class="form">
+      <label>Pagina-ID<input data-path="sources.facebook_page_id"></label>
+      <label>Page access token<input data-path="sources.facebook_token" type="password" autocomplete="off"></label>
+      <label>Graph API-versie (leeg = standaard van de app)<input data-path="sources.facebook_graph_version" placeholder="bijv. v24.0"></label>
+    </div>
+
+    <h2>Weer</h2>
+    <div class="form">
+      <label>Provincie voor weerswaarschuwingen (MeteoAlarm)<input data-path="sources.weather_alert_area"></label>
+      <label>Verversen elke (minuten)<input type="number" min="5" data-path="sources.weather_minutes"></label>
+    </div>
+  </section>
+
+  <!-- SCHERM -->
+  <section data-pane="screen" class="pane">
+    <h2>TV automatisch aan/uit</h2>
+    <p class="hint">Schakelt de TV via HDMI-CEC (pakket <code>cec-utils</code>). Werkt dat niet met jouw TV, gebruik dan bijv. <code>wlr-randr --output HDMI-A-1 --off</code> / <code>--on</code>.</p>
+    <div class="form">
+      <label class="check"><input type="checkbox" data-path="screen.enabled"> Tijdschema gebruiken</label>
+      <label>Aan om<input type="time" data-path="screen.on"></label>
+      <label>Uit om<input type="time" data-path="screen.off"></label>
+      <label class="wide">Commando aan<input data-path="screen.cmd_on"></label>
+      <label class="wide">Commando uit<input data-path="screen.cmd_off"></label>
+    </div>
+  </section>
+
+  <!-- STATUS -->
+  <section data-pane="status" class="pane">
+    <div class="pane-head"><h2>Status</h2><button class="btn" id="refresh">Nu alles verversen</button></div>
+    <div id="status"></div>
+
+    <h2>Bijwerken</h2>
+    <p class="hint">Haalt de nieuwste versie van het infobord van GitHub. Je instellingen, uploads en jaarplanning (map <code>data/</code>) blijven staan. Het infobord herstart daarna vanzelf; het scherm laadt zichzelf opnieuw.</p>
+    <div class="form">
+      <label>GitHub-repository (eigenaar/naam)<input data-path="update.repo" placeholder="bijv. graafotto/infobord"></label>
+      <label>Branch<input data-path="update.branch"></label>
+      <label>Token (alleen bij een privé-repository)<input data-path="update.token" type="password" autocomplete="off"></label>
+      <label class="check"><input type="checkbox" data-path="update.auto"> Elke nacht automatisch bijwerken (±04:30)</label>
+    </div>
+    <div class="row"><button class="btn" id="upd-check">Controleer op updates</button><button class="btn primary" id="upd-now" hidden>Nu bijwerken</button></div>
+    <div id="upd-result" class="hint"></div>
+  </section>
+</main>
+
+<div id="toast" hidden></div>
+<script src="/static/admin.js?v={{ v }}"></script>
+</body>
+</html>

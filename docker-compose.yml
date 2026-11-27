@@ -1,0 +1,19 @@
+# Infobord in Docker (bijv. TrueNAS SCALE: Apps → Discover Apps → ⋮ → Install via YAML)
+# Pas het pad naar je dataset aan: daar staat de uitgepakte infobord-map.
+services:
+  infobord:
+    image: python:3.12-slim
+    container_name: infobord
+    working_dir: /app
+    command: >
+      sh -c "pip install --no-cache-dir -q -r requirements.txt &&
+             python -m infobord"
+    environment:
+      - INFOBORD_PORT=8080
+      - INFOBORD_DATA=/app/data
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /mnt/tank/apps/infobord:/app
+    ports:
+      - "8085:8080"
+    restart: unless-stopped
